@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Employee.Management.Employees;
 
 namespace Employee.Management;
 
@@ -6,8 +7,7 @@ public class ManagementApplicationAutoMapperProfile : Profile
 {
     public ManagementApplicationAutoMapperProfile()
     {
-        /* You can configure your AutoMapper mapping configuration here.
-         * Alternatively, you can split your mapping configurations
-         * into multiple profile classes for a better organization. */
+        CreateMap<Employees.Employee, EmployeeDto>();
+        CreateMap<CreateUpdateEmployeeDto, Employees.Employee>();
     }
 }

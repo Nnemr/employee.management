@@ -9,6 +9,7 @@ public static class ManagementEfCoreEntityExtensionMappings
 {
     private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
+
     public static void Configure()
     {
         ManagementGlobalFeatureConfigurator.Configure();

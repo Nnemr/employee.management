@@ -11,4 +11,5 @@ public abstract class ManagementController : AbpControllerBase
     {
         LocalizationResource = typeof(ManagementResource);
     }
+
 }

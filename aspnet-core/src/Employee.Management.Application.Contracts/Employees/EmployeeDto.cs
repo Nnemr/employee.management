@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Volo.Abp;
-using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.Application.Dtos;
 
 namespace Employee.Management.Employees
 {
-    public class Employee : AuditedAggregateRoot<Guid>, ISoftDelete
+    public class EmployeeDto : AuditedEntityDto<Guid>
     {
+        public Guid EmployeeId { get; set; }
 
         public Guid? ManagerId { get; set; }
-
-        public Employee Manager { get; set; }
 
         public string FirstName { get; set; }
 
@@ -28,8 +26,6 @@ namespace Employee.Management.Employees
 
         public DateTime LastDay { get; set; }
 
-        public bool IsDeleted { get; set; }
-
-        public ICollection<Employee> Subordinates { get; set; }
+        public ICollection<EmployeeDto>? Subordinates { get; set; } = null;
     }
 }

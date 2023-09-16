@@ -1,9 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Reflection.Emit;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
@@ -23,7 +26,7 @@ public class ManagementDbContext :
     IIdentityDbContext,
     ITenantManagementDbContext
 {
-    /* Add DbSet properties for your Aggregate Roots / Entities here. */
+    public DbSet<Employees.Employee> Employees { get; set; }
 
     #region Entities from the modules
 
@@ -59,9 +62,24 @@ public class ManagementDbContext :
 
     }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+ /*       optionsBuilder.UseSqlServer("Server=localhost;Database=employee_management;Trusted_Connection=True;TrustServerCertificate=True;", builder =>
+        {
+            builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+        });*/
+        base.OnConfiguring(optionsBuilder);
+    }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+
+        builder.Entity<Employees.Employee>()
+            .HasOne(e => e.Manager)
+            .WithMany(e => e.Subordinates)
+            .HasForeignKey(e => e.ManagerId);
 
         /* Include modules to your migration db context */
 
@@ -74,13 +92,20 @@ public class ManagementDbContext :
         builder.ConfigureFeatureManagement();
         builder.ConfigureTenantManagement();
 
-        /* Configure your own tables/entities inside here */
+        builder.Entity<Employees.Employee>().HasIndex(employee => employee.NationalId).IsUnique();
 
-        //builder.Entity<YourEntity>(b =>
-        //{
-        //    b.ToTable(ManagementConsts.DbTablePrefix + "YourEntities", ManagementConsts.DbSchema);
-        //    b.ConfigureByConvention(); //auto configure for the base class props
-        //    //...
-        //});
+
+        builder.Entity<Employees.Employee>(b =>
+        {
+            b.ToTable("Employees");
+            b.ConfigureByConvention();
+            b.Property(employee => employee.ManagerId).IsRequired().HasColumnName("manager_id");
+            b.Property(employee => employee.FirstName).IsRequired().HasMaxLength(50).HasColumnName("first_name");
+            b.Property(employee => employee.LastName).IsRequired().HasMaxLength(50).HasColumnName("last_name");
+            b.Property(employee => employee.EmploymentDate).IsRequired().HasColumnName("employment_date");
+            b.Property(employee => employee.LastDay).IsRequired().HasColumnName("last_day");
+            b.Property(employee => employee.Department).IsRequired().HasColumnName("department");
+        });
+
     }
 }
