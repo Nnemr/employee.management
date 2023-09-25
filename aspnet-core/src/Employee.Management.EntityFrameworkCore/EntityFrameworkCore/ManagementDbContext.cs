@@ -79,7 +79,8 @@ public class ManagementDbContext :
         builder.Entity<Employees.Employee>()
             .HasOne(e => e.Manager)
             .WithMany(e => e.Subordinates)
-            .HasForeignKey(e => e.ManagerId);
+            .HasForeignKey(e => e.ManagerId)
+            .OnDelete(DeleteBehavior.NoAction);
 
         /* Include modules to your migration db context */
 
@@ -99,12 +100,12 @@ public class ManagementDbContext :
         {
             b.ToTable("Employees");
             b.ConfigureByConvention();
-            b.Property(employee => employee.ManagerId).IsRequired().HasColumnName("manager_id");
+            b.Property(employee => employee.ManagerId).IsRequired(false).HasColumnName("manager_id");
             b.Property(employee => employee.FirstName).IsRequired().HasMaxLength(50).HasColumnName("first_name");
             b.Property(employee => employee.LastName).IsRequired().HasMaxLength(50).HasColumnName("last_name");
             b.Property(employee => employee.EmploymentDate).IsRequired().HasColumnName("employment_date");
-            b.Property(employee => employee.LastDay).IsRequired().HasColumnName("last_day");
-            b.Property(employee => employee.Department).IsRequired().HasColumnName("department");
+            b.Property(employee => employee.LastDay).HasColumnName("last_day");
+            b.Property(employee => employee.Department).HasColumnName("department");
         });
 
     }

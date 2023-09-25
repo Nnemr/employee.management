@@ -16,12 +16,12 @@ namespace Employee.Management.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    managerid = table.Column<Guid>(name: "manager_id", type: "uniqueidentifier", nullable: false),
+                    managerid = table.Column<Guid>(name: "manager_id", type: "uniqueidentifier", nullable: true),
                     firstname = table.Column<string>(name: "first_name", type: "nvarchar(50)", maxLength: 50, nullable: false),
                     lastname = table.Column<string>(name: "last_name", type: "nvarchar(50)", maxLength: 50, nullable: false),
                     NationalId = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    department = table.Column<int>(type: "int", nullable: false),
+                    department = table.Column<int>(type: "int", nullable: true),
                     employmentdate = table.Column<DateTime>(name: "employment_date", type: "datetime2", nullable: false),
                     lastday = table.Column<DateTime>(name: "last_day", type: "datetime2", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
@@ -39,8 +39,7 @@ namespace Employee.Management.Migrations
                         name: "FK_Employees_Employees_manager_id",
                         column: x => x.managerid,
                         principalTable: "Employees",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(

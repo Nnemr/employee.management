@@ -1,5 +1,6 @@
 ﻿using Employee.Management.Employees;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -19,6 +20,12 @@ namespace Employee.Management.Controllers
         public Task<List<EmployeeDto>> GetOrganizationalStructure()
         {
             return employeeService.GetOrganizationalStructure();
+        }
+
+        [HttpGet("/api/[controller]/search")]
+        public Task<List<EmployeeDto>> Search([FromQuery(Name = "nationalId")] string? nationalId, [FromQuery(Name = "joiningDate")] DateTime? joiningDate, [FromQuery(Name = "isCurrentEmployee")] bool isCurrentEmployee)
+        {
+            return employeeService.Search(nationalId, joiningDate, isCurrentEmployee);
         }
     }
 }

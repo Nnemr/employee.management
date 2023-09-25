@@ -43,7 +43,7 @@ namespace Employee.Management.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("CreatorId");
 
-                    b.Property<int>("Department")
+                    b.Property<int?>("Department")
                         .HasColumnType("int")
                         .HasColumnName("department");
 
@@ -86,7 +86,6 @@ namespace Employee.Management.Migrations
                         .HasColumnName("last_name");
 
                     b.Property<Guid?>("ManagerId")
-                        .IsRequired()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("manager_id");
 
@@ -1770,8 +1769,7 @@ namespace Employee.Management.Migrations
                     b.HasOne("Employee.Management.Employees.Employee", "Manager")
                         .WithMany("Subordinates")
                         .HasForeignKey("ManagerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Manager");
                 });

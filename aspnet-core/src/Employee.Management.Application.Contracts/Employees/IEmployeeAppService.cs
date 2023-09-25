@@ -13,7 +13,7 @@ namespace Employee.Management.Employees
             PagedAndSortedResultRequestDto,
             CreateUpdateEmployeeDto>
     {
-        public Task<List<EmployeeDto>> Search(string nationalId, string? startDate, bool? isDeleted);
+        public Task<List<EmployeeDto>> Search(string? nationalId, DateTime? startDate, bool? isDeleted);
 
         public Task<List<EmployeeDto>> GetOrganizationalStructure();
     }
